@@ -1,0 +1,32 @@
+[
+  {
+    "id": "bodyweight_squat",
+    "name": "Bodyweight Squat",
+    "primaryMuscles": ["quadriceps", "glutes"],
+    "secondaryMuscles": ["hamstrings"],
+    "equipment": "body only",
+    "level": "beginner",
+    "instructions": ["Stand tall.", "Sit hips back.", "Return to standing."],
+    "images": []
+  },
+  {
+    "id": "push_up",
+    "name": "Push Up",
+    "primaryMuscles": ["chest"],
+    "secondaryMuscles": ["triceps", "shoulders"],
+    "equipment": "body only",
+    "level": "beginner",
+    "instructions": ["Brace core.", "Lower under control.", "Press up."],
+    "images": []
+  },
+  {
+    "id": "glute_bridge",
+    "name": "Glute Bridge",
+    "primaryMuscles": ["glutes"],
+    "secondaryMuscles": ["hamstrings"],
+    "equipment": "body only",
+    "level": "beginner",
+    "instructions": ["Lie on back.", "Drive hips up.", "Lower slowly."],
+    "images": []
+  }
+]

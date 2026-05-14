@@ -1,0 +1,156 @@
+[
+  {
+    "aliases": ["oats", "oatmeal", "燕麦", "燕麦片", "ots"],
+    "name": "oats, rolled, raw",
+    "kcal": 389,
+    "protein_g": 16.9,
+    "carb_g": 66.3,
+    "fat_g": 6.9,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["rice", "cooked rice", "米饭", "白米饭"],
+    "name": "rice, white, cooked",
+    "kcal": 130,
+    "protein_g": 2.7,
+    "carb_g": 28.2,
+    "fat_g": 0.3,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["chicken breast", "鸡胸肉"],
+    "name": "chicken breast, roasted",
+    "kcal": 165,
+    "protein_g": 31.0,
+    "carb_g": 0.0,
+    "fat_g": 3.6,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["egg", "鸡蛋"],
+    "name": "egg, whole",
+    "kcal": 143,
+    "protein_g": 12.6,
+    "carb_g": 0.7,
+    "fat_g": 9.5,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["milk", "牛奶"],
+    "name": "milk, whole",
+    "kcal": 61,
+    "protein_g": 3.2,
+    "carb_g": 4.8,
+    "fat_g": 3.3,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["banana", "香蕉"],
+    "name": "banana, raw",
+    "kcal": 89,
+    "protein_g": 1.1,
+    "carb_g": 22.8,
+    "fat_g": 0.3,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["broccoli", "西兰花"],
+    "name": "broccoli, raw",
+    "kcal": 34,
+    "protein_g": 2.8,
+    "carb_g": 6.6,
+    "fat_g": 0.4,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["salmon", "三文鱼"],
+    "name": "salmon, atlantic, cooked",
+    "kcal": 206,
+    "protein_g": 22.1,
+    "carb_g": 0.0,
+    "fat_g": 12.4,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["tofu", "豆腐"],
+    "name": "tofu, firm",
+    "kcal": 144,
+    "protein_g": 17.3,
+    "carb_g": 2.8,
+    "fat_g": 8.7,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["beef", "牛肉"],
+    "name": "beef, lean cooked",
+    "kcal": 217,
+    "protein_g": 26.1,
+    "carb_g": 0.0,
+    "fat_g": 11.8,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["pork", "猪肉"],
+    "name": "pork, cooked lean",
+    "kcal": 242,
+    "protein_g": 27.3,
+    "carb_g": 0.0,
+    "fat_g": 13.9,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback seeded from USDA-style public reference values for demo reproducibility."
+  },
+  {
+    "aliases": ["炒河粉", "fried kway teow", "char kway teow"],
+    "name": "char kway teow, hawker style",
+    "kcal": 190,
+    "protein_g": 6.0,
+    "carb_g": 24.0,
+    "fat_g": 7.5,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback for local dish; use HPB/FOCOS cache when available."
+  },
+  {
+    "aliases": ["沙茶面", "satay noodle"],
+    "name": "satay noodle soup",
+    "kcal": 145,
+    "protein_g": 7.0,
+    "carb_g": 18.0,
+    "fat_g": 4.8,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback for local dish; use HPB/FOCOS cache when available."
+  },
+  {
+    "aliases": ["芋圆", "taro balls"],
+    "name": "taro balls dessert",
+    "kcal": 210,
+    "protein_g": 1.0,
+    "carb_g": 48.0,
+    "fat_g": 0.6,
+    "serving_size_g": 100,
+    "source": "local_food_db",
+    "source_detail": "Local fallback for local dish; use HPB/FOCOS cache when available."
+  }
+]

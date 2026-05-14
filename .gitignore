@@ -1,0 +1,14 @@
+.env
+*.db
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+data/audits/*.json
+data/cache/
+data/llm_usage.db
+evals/results/*.json
+demo/expected_outputs/*.json
+!data/audits/.gitkeep
+!evals/results/.gitkeep
+!demo/expected_outputs/.gitkeep

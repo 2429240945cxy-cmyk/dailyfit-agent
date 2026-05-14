@@ -1,0 +1,30 @@
+{"id": "m_001", "conversation_id": "conv_1", "turn_id": "t_1", "query": "牛肉饮食有什么替代", "expected_memory_ids": ["mem_beef"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_002", "conversation_id": "conv_1", "turn_id": "t_2", "query": "别给我乳制品", "expected_memory_ids": ["mem_lactose"], "should_hit": true, "category": "constraint"}
+{"id": "m_003", "conversation_id": "conv_1", "turn_id": "t_3", "query": "还按减脂目标做早餐", "expected_memory_ids": ["mem_cut"], "should_hit": true, "category": "long_gap"}
+{"id": "m_004", "conversation_id": "conv_1", "turn_id": "t_4", "query": "现在改成增肌了", "expected_memory_ids": ["mem_bulk"], "should_hit": true, "category": "changed_goal"}
+{"id": "m_005", "conversation_id": "conv_1", "turn_id": "t_5", "query": "腿部训练避开膝盖压力", "expected_memory_ids": ["mem_knee"], "should_hit": true, "category": "constraint"}
+{"id": "m_006", "conversation_id": "conv_2", "turn_id": "t_6", "query": "明早要快手一点", "expected_memory_ids": ["mem_breakfast"], "should_hit": true, "category": "preference"}
+{"id": "m_007", "conversation_id": "conv_2", "turn_id": "t_7", "query": "便宜高蛋白怎么吃", "expected_memory_ids": ["mem_budget"], "should_hit": true, "category": "preference"}
+{"id": "m_008", "conversation_id": "conv_2", "turn_id": "t_8", "query": "想吃中餐风格", "expected_memory_ids": ["mem_chinese"], "should_hit": true, "category": "preference"}
+{"id": "m_009", "conversation_id": "conv_2", "turn_id": "t_9", "query": "长跑前一天怎么补碳", "expected_memory_ids": ["mem_marathon"], "should_hit": true, "category": "long_gap"}
+{"id": "m_010", "conversation_id": "conv_2", "turn_id": "t_10", "query": "肩伤不能推举", "expected_memory_ids": ["mem_shoulder"], "should_hit": true, "category": "constraint"}
+{"id": "m_011", "conversation_id": "conv_3", "turn_id": "t_11", "query": "牛排推荐", "expected_memory_ids": ["mem_beef"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_012", "conversation_id": "conv_3", "turn_id": "t_12", "query": "milk-free smoothie", "expected_memory_ids": ["mem_lactose"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_013", "conversation_id": "conv_3", "turn_id": "t_13", "query": "cutting meal prep", "expected_memory_ids": ["mem_cut"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_014", "conversation_id": "conv_3", "turn_id": "t_14", "query": "bulk diet now", "expected_memory_ids": ["mem_bulk"], "should_hit": true, "category": "changed_goal"}
+{"id": "m_015", "conversation_id": "conv_3", "turn_id": "t_15", "query": "knee-friendly lower body", "expected_memory_ids": ["mem_knee"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_016", "conversation_id": "conv_4", "turn_id": "t_16", "query": "simple breakfast", "expected_memory_ids": ["mem_breakfast"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_017", "conversation_id": "conv_4", "turn_id": "t_17", "query": "low budget dinner", "expected_memory_ids": ["mem_budget"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_018", "conversation_id": "conv_4", "turn_id": "t_18", "query": "Chinese-style lunch", "expected_memory_ids": ["mem_chinese"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_019", "conversation_id": "conv_4", "turn_id": "t_19", "query": "marathon carb loading", "expected_memory_ids": ["mem_marathon"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_020", "conversation_id": "conv_4", "turn_id": "t_20", "query": "shoulder safe workout", "expected_memory_ids": ["mem_shoulder"], "should_hit": true, "category": "paraphrase"}
+{"id": "m_021", "conversation_id": "conv_5", "turn_id": "t_21", "query": "我今天想吃鱼", "expected_memory_ids": [], "should_hit": false, "category": "false_positive"}
+{"id": "m_022", "conversation_id": "conv_5", "turn_id": "t_22", "query": "帮我查香蕉营养", "expected_memory_ids": [], "should_hit": false, "category": "false_positive"}
+{"id": "m_023", "conversation_id": "conv_5", "turn_id": "t_23", "query": "今天几点训练", "expected_memory_ids": [], "should_hit": false, "category": "false_positive"}
+{"id": "m_024", "conversation_id": "conv_5", "turn_id": "t_24", "query": "水喝多少", "expected_memory_ids": [], "should_hit": false, "category": "false_positive"}
+{"id": "m_025", "conversation_id": "conv_5", "turn_id": "t_25", "query": "鸡蛋有多少蛋白", "expected_memory_ids": [], "should_hit": false, "category": "false_positive"}
+{"id": "m_026", "conversation_id": "conv_6", "turn_id": "t_26", "query": "三个月后继续按不吃牛肉安排", "expected_memory_ids": ["mem_beef"], "should_hit": true, "category": "long_gap"}
+{"id": "m_027", "conversation_id": "conv_6", "turn_id": "t_27", "query": "预算还是很紧", "expected_memory_ids": ["mem_budget"], "should_hit": true, "category": "long_gap"}
+{"id": "m_028", "conversation_id": "conv_6", "turn_id": "t_28", "query": "从减脂切换到维持", "expected_memory_ids": ["mem_cut"], "should_hit": true, "category": "profile_update"}
+{"id": "m_029", "conversation_id": "conv_6", "turn_id": "t_29", "query": "早餐还是越简单越好", "expected_memory_ids": ["mem_breakfast"], "should_hit": true, "category": "long_gap"}
+{"id": "m_030", "conversation_id": "conv_6", "turn_id": "t_30", "query": "膝盖最近好了但先保守", "expected_memory_ids": ["mem_knee"], "should_hit": true, "category": "profile_update"}

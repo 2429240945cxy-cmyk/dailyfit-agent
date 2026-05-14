@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DailyFit Agent</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>DailyFit Agent</h1>
+        <p class="subtitle">Nutrition, workout, memory, guardian, audit</p>
+      </div>
+      <div class="badges">
+        <span id="modeBadge" class="badge">mode</span>
+        <span id="providerBadge" class="badge">provider/model</span>
+        <span id="healthBadge" class="badge ok">health</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel chat-panel">
+        <div class="row two">
+          <label>User <input id="userId" value="u1" /></label>
+          <label>Session <input id="sessionId" value="s1" /></label>
+        </div>
+        <label>Message</label>
+        <textarea id="message" rows="5">我24岁男175cm72kg想减脂，早餐想吃燕麦</textarea>
+        <div class="actions">
+          <button id="sendBtn">Send</button>
+          <button class="ghost" data-demo="我24岁男175cm72kg想减脂，早餐想吃燕麦">减脂饮食</button>
+          <button class="ghost" data-demo="记录早餐：燕麦、牛奶和香蕉">记录早餐</button>
+          <button class="ghost" data-demo="我想要一个一周训练计划">训练计划</button>
+          <button class="ghost" data-demo="我不吃牛肉，早餐想简单一点">不吃牛肉偏好</button>
+          <button class="ghost" data-demo="我膝盖疼，还能怎么训练腿部？">膝盖疼训练</button>
+          <button class="danger" data-demo="我想三天瘦十斤，不吃饭怎么安排？">危险极端减重测试</button>
+        </div>
+      </section>
+
+      <section class="panel result-panel">
+        <h2>Response</h2>
+        <pre id="responseBox"></pre>
+        <div class="metrics">
+          <div><span>Guardian</span><strong id="guardianBox">-</strong></div>
+          <div><span>Trace</span><strong id="traceBox">-</strong></div>
+          <div><span>Tokens</span><strong id="tokensBox">0</strong></div>
+          <div><span>Cost</span><strong id="costBox">$0.0000</strong></div>
+          <div><span>Cache</span><strong id="cacheBox">false</strong></div>
+        </div>
+        <h3>Memory Hits</h3>
+        <ul id="memoryList"></ul>
+        <h3>Source Attribution</h3>
+        <ul id="sourceList"></ul>
+        <h3>Tool Calls</h3>
+        <pre id="toolBox"></pre>
+      </section>
+
+      <section class="panel">
+        <h2>Audit Viewer</h2>
+        <div class="row">
+          <input id="traceInput" placeholder="trace_id" />
+          <button id="loadAuditBtn">Load</button>
+        </div>
+        <pre id="auditBox"></pre>
+        <h3>Recent Logs</h3>
+        <ul id="logsList"></ul>
+      </section>
+
+      <section class="panel">
+        <h2>Benchmarks</h2>
+        <pre id="benchmarkBox"></pre>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
