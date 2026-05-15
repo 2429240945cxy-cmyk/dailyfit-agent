@@ -20,8 +20,17 @@ async def tools_node(state: AgentState) -> AgentState:
                     "fallback_reason": result.fallback_reason,
                 }
         elif call["name"] == "plan_workout":
-            result = plan_workout(**call["args"])
-            results.append({"name": "plan_workout", "result": result.model_dump()})
+            args = dict(call["args"])
+            if state.guardian and "injury_training" in state.guardian.risk_categories:
+                constraints = list(args.get("constraints") or [])
+                constraints.extend(["injury_training", state.guardian.reason])
+                if state.guardian.safe_alternative:
+                    constraints.append(state.guardian.safe_alternative)
+                args["constraints"] = constraints
+            result = plan_workout(**args)
+            payload = result.model_dump()
+            results.append({"name": "plan_workout", "result": payload})
+            state.audit["workout_plan"] = payload
     state.tool_results = results
     state.audit["tool_results"] = results
     return state

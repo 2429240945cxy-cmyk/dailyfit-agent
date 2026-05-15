@@ -2,6 +2,62 @@ from __future__ import annotations
 
 from backend.workout.schemas import Exercise
 
+INJURY_CONTRAINDICATIONS = {
+    "knee": [
+        "squat",
+        "lunge",
+        "jump",
+        "run",
+        "sprint",
+        "air bike",
+        "leg press",
+        "step",
+        "stairs",
+        "burpee",
+        "bound",
+        "skip",
+        "skating",
+        "skater",
+        "hop",
+        "yoke",
+        "atlas",
+        "stone",
+        "crawl",
+        "sled",
+    ],
+    "shoulder": [
+        "overhead press",
+        "shoulder press",
+        "bench press",
+        "pull-up",
+        "pull up",
+        "lateral raise",
+        "snatch",
+        "clean",
+        "handstand",
+        "upright row",
+    ],
+    "lower_back": ["deadlift", "good morning", "sit-up", "sit up", "leg raise", "barbell row", "kettlebell swing"],
+    "wrist": ["push-up", "push up", "handstand", "front rack", "bench press"],
+    "ankle": ["jump", "run", "calf raise", "box jump"],
+}
+
+
+def _affected_parts(constraints: list[str]) -> list[str]:
+    joined = " ".join(constraints).lower()
+    parts = []
+    if any(term in joined for term in ["knee", "膝", "膝盖"]):
+        parts.append("knee")
+    if any(term in joined for term in ["shoulder", "肩"]):
+        parts.append("shoulder")
+    if any(term in joined for term in ["lower back", "back pain", "腰", "背"]):
+        parts.append("lower_back")
+    if any(term in joined for term in ["wrist", "手腕"]):
+        parts.append("wrist")
+    if any(term in joined for term in ["ankle", "脚踝"]):
+        parts.append("ankle")
+    return parts
+
 
 def exclusion_reason(exercise: Exercise, constraints: list[str]) -> str | None:
     text = " ".join(
@@ -13,18 +69,14 @@ def exclusion_reason(exercise: Exercise, constraints: list[str]) -> str | None:
             " ".join(exercise.instructions),
         ]
     ).lower()
-    joined = " ".join(constraints).lower()
-    if any(term in joined for term in ["knee", "膝盖", "膝痛"]):
-        if any(term in text for term in ["heavy squat", "barbell squat", "jump", "lunge"]):
-            return "knee pain rule excludes heavy squat, lunge, and high-impact jump patterns"
+    name = exercise.name.lower()
+    for part in _affected_parts(constraints):
+        for banned in INJURY_CONTRAINDICATIONS[part]:
+            if banned in name or banned in text:
+                return f"{part} injury rule excludes {banned}"
+    if "knee" in _affected_parts(constraints):
         if "quadriceps" in text and "barbell" in text:
             return "knee pain rule excludes quadriceps + barbell patterns"
-    if any(term in joined for term in ["shoulder", "肩"]):
-        if any(term in text for term in ["overhead press", "shoulder press", "snatch", "upright row"]):
-            return "shoulder injury rule excludes overhead or shoulder-heavy movements"
-    if any(term in joined for term in ["lower back", "腰", "back pain", "腰伤"]):
-        if any(term in text for term in ["deadlift", "good morning", "axial", "barbell row"]):
-            return "lower back pain rule excludes deadlift-heavy or axial loading movements"
     return None
 
 
