@@ -6,6 +6,8 @@ Start:
 uvicorn backend.app:app --port 8000
 ```
 
-Open `http://localhost:8000`. Try nutrition, workout, preference, injury, and
-dangerous weight-loss demo buttons. The result panel shows guardian verdict,
-memory hits, source attribution, trace id, usage, and cache status.
+Open `http://localhost:8000`. Type a paragraph in the composer and submit it to
+get a chat-style assistant reply. The right inspector updates with guardian
+verdict, memory hits, source attribution, tool calls, trace id, usage, cost, and
+cache status. Demo buttons still cover nutrition, workout, preference, injury,
+and dangerous weight-loss flows.

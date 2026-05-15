@@ -16,3 +16,34 @@ def test_chinese_single_doc_overlap_hits_beef() -> None:
     hits = search_memories("牛肉饮食", store.list_by_user("u1"), top_k=3)
     assert hits
     assert hits[0].summary == "不吃牛肉"
+
+
+def test_memory_store_deduplicates_summary() -> None:
+    store = MemoryStore(":memory:")
+    first = store.add(
+        {"user_id": "u1", "type": "preference", "summary": "用户不吃牛肉", "retrievable_text": "用户不吃牛肉"}
+    )
+    second = store.add(
+        {"user_id": "u1", "type": "preference", "summary": "用户不吃牛肉", "retrievable_text": "用户不吃牛肉"}
+    )
+    memories = store.list_by_user("u1")
+    assert first.id == second.id
+    assert len(memories) == 1
+
+
+def test_retrieval_deduplicates_existing_duplicate_summaries() -> None:
+    store = MemoryStore(":memory:")
+    with store._connect() as conn:
+        conn.executemany(
+            """
+            insert into memory
+            (id, user_id, type, summary, retrievable_text, metadata, created_at, updated_at)
+            values (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            [
+                ("m1", "u1", "preference", "用户不吃牛肉", "用户不吃牛肉", "{}", "2026-01-01", "2026-01-01"),
+                ("m2", "u1", "preference", "用户不吃牛肉", "用户不吃牛肉", "{}", "2026-01-02", "2026-01-02"),
+            ],
+        )
+    hits = search_memories("牛肉饮食", store.list_by_user("u1"), top_k=3)
+    assert [hit.summary for hit in hits] == ["用户不吃牛肉"]

@@ -6,3 +6,11 @@ health risk patterns. Memory queries are public/anonymized patterns.
 
 Expected live numbers are allowed to be imperfect; suspiciously high live scores
 should trigger dataset leakage review.
+
+E2E v2 uses a live Aliyun judge model that must differ from the tested chat
+model. Judge output is parsed with a tolerant JSON extractor that handles code
+fences and short preambles, while parse failures are reported and fall back to a
+small deterministic heuristic instead of being counted as silent agent failures.
+The result JSON now reports judge pass rate, parse success rate, heuristic
+fallback rate, per-scenario pass rates, guardian intervention rate, memory use,
+and real nutrition source coverage.

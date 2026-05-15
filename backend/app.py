@@ -111,6 +111,8 @@ async def benchmarks_latest() -> dict[str, Any]:
     result_dir = ROOT_DIR / "evals/results"
     results = []
     for path in sorted(result_dir.glob("*_v2_*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+        if "pre_judge_fix" in path.name:
+            continue
         try:
             results.append(json.loads(path.read_text(encoding="utf-8")))
         except json.JSONDecodeError:

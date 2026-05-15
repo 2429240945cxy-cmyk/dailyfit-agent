@@ -49,10 +49,10 @@ flowchart LR
 <!-- BENCHMARK_TABLE_START -->
 | Benchmark | Mode | Samples | Metric | Value |
 |---|---:|---:|---|---:|
-| Nutrition v2 | live_real | 53 | meal_kcal_mae | 156.55 |
+| Nutrition v2 | live_real | 53 | meal_kcal_mae | 157.77 |
 | Guardian v2 | live_real | 65 | precision/recall | 0.9655/0.6222 |
 | Memory v2 | live_real | 30 | hit_rate@3 | 0.5667 |
-| E2E v2 | live_real | 30 | judge_pass_rate | 0.0 |
+| E2E v2 | live_real | 30 | judge_pass_rate | 0.2667 |
 <!-- BENCHMARK_TABLE_END -->
 
 ## Cost Report
@@ -86,12 +86,14 @@ Guardian policy, self-audit, and interview notes.
 <!-- BENCHMARK_ALL_MODES_START -->
 | Benchmark | Mode | Samples | Metric | Value |
 |---|---:|---:|---|---:|
-| E2E v2 | live_real | 30 | judge_pass_rate | 0.0 |
+| E2E_Limit_10 v2 | live_real | 10 | judge_pass_rate | 0.1 |
+| E2E_Offset_0_Limit_3 v2 | live_real | 3 | judge_pass_rate | 0.0 |
+| E2E v2 | live_real | 30 | judge_pass_rate | 0.2667 |
 | E2E v2 | demo_mock | 30 | judge_pass_rate | 1.0 |
 | Guardian v2 | live_real | 65 | precision/recall | 0.9655/0.6222 |
 | Guardian v2 | demo_mock | 65 | precision/recall | 0.9655/0.6222 |
 | Memory v2 | live_real | 30 | hit_rate@3 | 0.5667 |
 | Memory v2 | demo_mock | 30 | hit_rate@3 | 0.5667 |
-| Nutrition v2 | live_real | 53 | meal_kcal_mae | 156.55 |
+| Nutrition v2 | live_real | 53 | meal_kcal_mae | 157.77 |
 | Nutrition v2 | demo_mock | 53 | meal_kcal_mae | 160.3 |
 <!-- BENCHMARK_ALL_MODES_END -->

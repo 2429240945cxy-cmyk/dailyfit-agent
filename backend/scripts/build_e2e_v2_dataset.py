@@ -63,8 +63,6 @@ def main() -> None:
                     "turns": turns,
                     "rubric": RUBRIC,
                     "judge_provider": "aliyun_openai",
-                    "tested_model": "qwen-plus",
-                    "judge_model": "qwen-max",
                 }
             )
             idx += 1

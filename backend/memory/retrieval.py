@@ -53,4 +53,14 @@ def search_memories(query: str, memories: list[MemoryItem], top_k: int = 3) -> l
                 )
             )
     ranked.sort(key=lambda hit: hit.score, reverse=True)
-    return ranked[:top_k]
+    deduped: list[MemoryHit] = []
+    seen: set[str] = set()
+    for hit in ranked:
+        key = hit.summary.strip().lower() or hit.retrievable_text.strip().lower() or hit.id
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(hit)
+        if len(deduped) >= top_k:
+            break
+    return deduped

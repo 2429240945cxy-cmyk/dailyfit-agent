@@ -101,3 +101,33 @@ gh pr create \
   --title "Finalize Aliyun live mode and benchmark reporting" \
   --body "Closes #<issue-number>. Validates DashScope live smoke, live benchmark outputs, README verification, web smoke, and no-secret scan."
 ```
+
+## Judge Fix And Chat UI Manual Flow
+
+`gh` was still not available during the 2026-05-15 continuation work. After
+installing and authenticating `gh`, publish the live judge parsing fix, memory
+dedupe fix, live benchmark refresh, and chat-style web UI with:
+
+```bash
+gh auth login
+gh auth status
+
+gh repo create dailyfit-agent --public --source=. --remote=origin --push
+# If the repo already exists and no remote is configured:
+# rtk git remote add origin https://github.com/<YOUR_USERNAME>/dailyfit-agent.git
+# rtk git push -u origin main
+
+gh issue create \
+  --title "Harden E2E judge parsing and improve chat web UX" \
+  --body "Fix tolerant judge JSON parsing, avoid vision judge model assumptions, dedupe memory hits, refresh live benchmark reporting, and make the web UI behave like a direct chat surface."
+
+rtk git checkout -b issue-e2e-judge-web-ux
+rtk git add .
+rtk git reset .env
+rtk git commit -m "fix: harden e2e judge and improve chat web ux"
+rtk git push -u origin issue-e2e-judge-web-ux
+
+gh pr create \
+  --title "Harden E2E judge parsing and chat web UX" \
+  --body "Closes #<issue-number>. Validates DashScope live smoke, full E2E judge parsing, web chat flow, README metric verification, self-audit dry-run, and no-secret scan."
+```

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,7 +10,7 @@
     <header class="topbar">
       <div>
         <h1>DailyFit Agent</h1>
-        <p class="subtitle">Nutrition, workout, memory, guardian, audit</p>
+        <p class="subtitle">像聊天一样使用，同时保留来源、Guardian、memory、audit 和 cost trace。</p>
       </div>
       <div class="badges">
         <span id="modeBadge" class="badge">mode</span>
@@ -19,58 +19,79 @@
       </div>
     </header>
 
-    <main class="layout">
-      <section class="panel chat-panel">
-        <div class="row two">
-          <label>User <input id="userId" value="u1" /></label>
-          <label>Session <input id="sessionId" value="s1" /></label>
+    <main class="shell">
+      <section class="chat-workspace">
+        <div id="conversation" class="conversation" aria-live="polite">
+          <article class="message assistant">
+            <div class="avatar">DF</div>
+            <div class="bubble">
+              <p>你好，我是 DailyFit Agent。输入你的饮食、训练、偏好或安全边界问题，我会给出回复，并显示来源和审计信息。</p>
+            </div>
+          </article>
         </div>
-        <label>Message</label>
-        <textarea id="message" rows="5">我24岁男175cm72kg想减脂，早餐想吃燕麦</textarea>
-        <div class="actions">
-          <button id="sendBtn">Send</button>
-          <button class="ghost" data-demo="我24岁男175cm72kg想减脂，早餐想吃燕麦">减脂饮食</button>
-          <button class="ghost" data-demo="记录早餐：燕麦、牛奶和香蕉">记录早餐</button>
-          <button class="ghost" data-demo="我想要一个一周训练计划">训练计划</button>
-          <button class="ghost" data-demo="我不吃牛肉，早餐想简单一点">不吃牛肉偏好</button>
-          <button class="ghost" data-demo="我膝盖疼，还能怎么训练腿部？">膝盖疼训练</button>
-          <button class="danger" data-demo="我想三天瘦十斤，不吃饭怎么安排？">危险极端减重测试</button>
-        </div>
+
+        <form id="chatForm" class="composer">
+          <div class="identity">
+            <label>User <input id="userId" value="u1" autocomplete="off" /></label>
+            <label>Session <input id="sessionId" value="s1" autocomplete="off" /></label>
+          </div>
+          <label class="message-label" for="message">Message</label>
+          <textarea id="message" rows="3" placeholder="例如：我24岁男175cm72kg想减脂，早餐想吃燕麦"></textarea>
+          <div class="composer-actions">
+            <button id="sendBtn" type="submit">Send</button>
+            <button type="button" class="ghost" data-demo="我24岁男175cm72kg想减脂，早餐想吃燕麦">减脂饮食</button>
+            <button type="button" class="ghost" data-demo="记录早餐：燕麦、牛奶和香蕉">记录早餐</button>
+            <button type="button" class="ghost" data-demo="我想要一个一周训练计划">训练计划</button>
+            <button type="button" class="ghost" data-demo="我不吃牛肉，早餐想简单一点">不吃牛肉偏好</button>
+            <button type="button" class="ghost" data-demo="我膝盖疼，还能怎么训练腿部？">膝盖疼训练</button>
+            <button type="button" class="danger" data-demo="我想三天瘦十斤，不吃饭怎么安排？">危险测试</button>
+          </div>
+        </form>
       </section>
 
-      <section class="panel result-panel">
-        <h2>Response</h2>
-        <pre id="responseBox"></pre>
-        <div class="metrics">
-          <div><span>Guardian</span><strong id="guardianBox">-</strong></div>
-          <div><span>Trace</span><strong id="traceBox">-</strong></div>
-          <div><span>Tokens</span><strong id="tokensBox">0</strong></div>
-          <div><span>Cost</span><strong id="costBox">$0.0000</strong></div>
-          <div><span>Cache</span><strong id="cacheBox">false</strong></div>
-        </div>
-        <h3>Memory Hits</h3>
-        <ul id="memoryList"></ul>
-        <h3>Source Attribution</h3>
-        <ul id="sourceList"></ul>
-        <h3>Tool Calls</h3>
-        <pre id="toolBox"></pre>
-      </section>
+      <aside class="inspector">
+        <section class="panel">
+          <h2>Trace</h2>
+          <div class="metrics">
+            <div><span>Guardian</span><strong id="guardianBox">-</strong></div>
+            <div><span>Trace</span><strong id="traceBox">-</strong></div>
+            <div><span>Tokens</span><strong id="tokensBox">0/0</strong></div>
+            <div><span>Cost</span><strong id="costBox">$0.000000</strong></div>
+            <div><span>Cache</span><strong id="cacheBox">false</strong></div>
+          </div>
+        </section>
 
-      <section class="panel">
-        <h2>Audit Viewer</h2>
-        <div class="row">
-          <input id="traceInput" placeholder="trace_id" />
-          <button id="loadAuditBtn">Load</button>
-        </div>
-        <pre id="auditBox"></pre>
-        <h3>Recent Logs</h3>
-        <ul id="logsList"></ul>
-      </section>
+        <section class="panel">
+          <h2>Memory Hits</h2>
+          <ul id="memoryList" class="compact-list"></ul>
+        </section>
 
-      <section class="panel">
-        <h2>Benchmarks</h2>
-        <pre id="benchmarkBox"></pre>
-      </section>
+        <section class="panel">
+          <h2>Source Attribution</h2>
+          <ul id="sourceList" class="compact-list"></ul>
+        </section>
+
+        <section class="panel">
+          <h2>Tool Results</h2>
+          <pre id="toolBox"></pre>
+        </section>
+
+        <section class="panel">
+          <h2>Audit Viewer</h2>
+          <div class="row">
+            <input id="traceInput" placeholder="trace_id" />
+            <button id="loadAuditBtn" type="button">Load</button>
+          </div>
+          <pre id="auditBox"></pre>
+          <h3>Recent Logs</h3>
+          <ul id="logsList" class="compact-list"></ul>
+        </section>
+
+        <section class="panel">
+          <h2>Benchmarks</h2>
+          <pre id="benchmarkBox"></pre>
+        </section>
+      </aside>
     </main>
 
     <script src="/static/app.js"></script>

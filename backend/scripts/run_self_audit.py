@@ -42,7 +42,7 @@ def detect_regressions() -> list[dict]:
         return [{"benchmark": "baseline", "reason": "parse_error"}]
     regressions = []
     for result_path in (ROOT / "evals/results").glob("*_v2_*.json"):
-        if result_path.name == "baseline.json":
+        if result_path.name == "baseline.json" or "pre_judge_fix" in result_path.name:
             continue
         current = json.loads(result_path.read_text(encoding="utf-8"))
         old = baseline.get(current.get("benchmark"))

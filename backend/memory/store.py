@@ -45,15 +45,26 @@ class MemoryStore:
 
     def add(self, item: dict) -> MemoryItem:
         now = utc_now()
+        existing_id = None
+        created_at = item.get("created_at") or now
+        if item.get("summary"):
+            with self._connect() as conn:
+                row = conn.execute(
+                    "select id, created_at from memory where user_id = ? and summary = ? limit 1",
+                    (item["user_id"], item["summary"]),
+                ).fetchone()
+                if row:
+                    existing_id = row[0]
+                    created_at = row[1] or created_at
         memory = MemoryItem(
-            id=item.get("id") or uuid.uuid4().hex,
+            id=existing_id or item.get("id") or uuid.uuid4().hex,
             user_id=item["user_id"],
             type=item.get("type", "preference"),
             summary=item["summary"],
             retrievable_text=item.get("retrievable_text") or item["summary"],
             metadata=item.get("metadata", {}),
-            created_at=item.get("created_at") or now,
-            updated_at=item.get("updated_at") or now,
+            created_at=created_at,
+            updated_at=now,
         )
         with self._connect() as conn:
             conn.execute(
