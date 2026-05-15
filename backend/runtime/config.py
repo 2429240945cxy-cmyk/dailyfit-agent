@@ -9,6 +9,13 @@ ROOT_DIR = Path(__file__).resolve().parents[2]
 
 def load_local_env() -> None:
     env_path = ROOT_DIR / ".env"
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(env_path)
+        return
+    except Exception:
+        pass
     if not env_path.exists():
         return
     for raw_line in env_path.read_text(encoding="utf-8").splitlines():

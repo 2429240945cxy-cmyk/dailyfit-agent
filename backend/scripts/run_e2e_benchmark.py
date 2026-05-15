@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
 from backend.graph.workflow import run_agent
 from backend.runtime.config import get_settings
 from backend.runtime.llm import get_judge_client
+from backend.runtime.llm_usage import UsageStore
 from backend.scripts.benchmark_common import base_result, read_jsonl, write_result
 
 
@@ -51,6 +52,8 @@ async def run() -> dict:
         build()
     rows = read_jsonl(path)
     settings = get_settings()
+    usage_store = UsageStore()
+    spent_before = usage_store.spent_today()
     pass_count = 0
     judge_errors = 0
     trace_path = ROOT / "evals/results/e2e_v2_judge_traces.jsonl"
@@ -86,6 +89,8 @@ async def run() -> dict:
     if settings.mode == "live" and not settings.dashscope_api_key_present:
         mode = "live_missing_key_not_run"
     output = base_result("e2e", str(path), mode, len(rows))
+    spent_after = usage_store.spent_today()
+    output["cost_usd"] = round(max(0.0, spent_after - spent_before), 6)
     output["metrics"] = {
         "judge_pass_rate": round(pass_count / max(1, len(rows)), 4),
         "judge_error_count": judge_errors,

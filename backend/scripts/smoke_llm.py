@@ -44,12 +44,18 @@ async def run() -> dict:
     )
     emb = await AliyunEmbeddingClient().embed("memory smoke")
     usage_tokens = chat.input_tokens + chat.output_tokens + judge.input_tokens + judge.output_tokens
+    cost_usd = round(chat.cost_usd + judge.cost_usd, 6)
     return {
         "chat_ok": not chat.error and bool(chat.content),
         "judge_ok": not judge.error and bool(judge.content),
         "embedding_ok": bool(emb),
         "usage_tokens": usage_tokens,
         "provider": "aliyun_openai",
+        "chat_model": settings.llm_model,
+        "judge_model": settings.judge_model,
+        "embedding_model": settings.embedding_model,
+        "embedding_dim": len(emb),
+        "cost_usd": cost_usd,
         "base_url_configured": bool(settings.dashscope_base_url),
         "mode": "live_real",
     }

@@ -13,6 +13,9 @@ from backend.runtime.llm_usage import UsageStore
 
 def main() -> None:
     summary = UsageStore().today_summary()
+    result_path = ROOT / "evals/results/cost_report_v2.json"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    result_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     target = ROOT / "docs/cost_report.md"
     text = (
         "# Cost Report\n\n"

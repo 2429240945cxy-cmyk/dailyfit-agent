@@ -3,6 +3,32 @@ from __future__ import annotations
 from backend.graph.state import AgentState
 
 
+FOOD_HINTS = [
+    ("燕麦", "oatmeal"),
+    ("oat", "oatmeal"),
+    ("米饭", "rice cooked"),
+    ("rice", "rice cooked"),
+    ("鸡胸", "chicken breast"),
+    ("banana", "banana"),
+    ("香蕉", "banana"),
+    ("牛奶", "milk"),
+    ("milk", "milk"),
+    ("鸡蛋", "egg"),
+    ("egg", "egg"),
+    ("豆腐", "tofu"),
+    ("三文鱼", "salmon"),
+    ("牛肉", "beef"),
+]
+
+
+def extract_food_query(message: str) -> str:
+    text = message.lower()
+    for hint, query in FOOD_HINTS:
+        if hint.lower() in text:
+            return query
+    return message
+
+
 def tool_selection_node(state: AgentState) -> AgentState:
     calls = []
     if state.intent in {"nutrition", "meal_log", "profile_update", "general"}:
@@ -21,7 +47,7 @@ def tool_selection_node(state: AgentState) -> AgentState:
                 "吃",
             ]
         ):
-            calls.append({"name": "lookup_nutrition", "args": {"query": state.message}})
+            calls.append({"name": "lookup_nutrition", "args": {"query": extract_food_query(state.message)}})
     if state.intent in {"workout", "general"}:
         if any(term in state.message.lower() for term in ["训练", "workout", "exercise", "计划"]):
             constraints = []

@@ -17,7 +17,10 @@ def write_result(name: str, result: dict) -> Path:
     mode = result.get("mode", "demo_mock")
     path = result_dir / f"{name}_v2_{mode}.json"
     result["created_at"] = result.get("created_at") or datetime.now(UTC).isoformat()
-    path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    content = json.dumps(result, ensure_ascii=False, indent=2)
+    path.write_text(content, encoding="utf-8")
+    canonical = result_dir / f"{name}_v2.json"
+    canonical.write_text(content, encoding="utf-8")
     return path
 
 

@@ -9,7 +9,7 @@ from backend.graph.nodes.memory import memory_node
 from backend.graph.nodes.reflect import reflect_node
 from backend.graph.nodes.tool_selection import tool_selection_node
 from backend.graph.nodes.tools import tools_node
-from backend.graph.state import AgentState
+from backend.graph.state import AgentState, UsageInfo
 from backend.runtime.audit_logger import AuditLogger, default_audit_record, new_trace_id
 from backend.runtime.config import get_settings
 
@@ -57,6 +57,7 @@ async def run_agent(user_id: str, session_id: str, message: str) -> AgentState:
         mode=settings.public_mode,
         provider=settings.llm_provider,
         model=settings.llm_model,
+        usage=UsageInfo(provider=settings.llm_provider, model=settings.llm_model),
         trace_id=trace_id,
         audit=audit,
     )
