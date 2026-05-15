@@ -16,6 +16,17 @@ from backend.runtime.llm import get_chat_client, get_judge_client
 
 async def run() -> dict:
     settings = get_settings()
+    if settings.mode != "live":
+        return {
+            "chat_ok": False,
+            "judge_ok": False,
+            "embedding_ok": False,
+            "usage_tokens": 0,
+            "provider": "aliyun_openai",
+            "base_url_configured": bool(settings.dashscope_base_url),
+            "mode": settings.public_mode,
+            "error": "DAILYFIT_MODE is not live",
+        }
     if not settings.dashscope_api_key_present:
         return {
             "chat_ok": False,

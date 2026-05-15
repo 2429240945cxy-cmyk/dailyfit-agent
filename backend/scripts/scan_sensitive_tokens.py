@@ -18,6 +18,8 @@ ALLOW_PLACEHOLDERS = {"your_local_key", "<local-value>", "<your-key>", "your_key
 
 
 def should_skip(path: Path) -> bool:
+    if path.name == ".env":
+        return True
     if path.name == "scan_sensitive_tokens.py":
         return True
     if any(part in SKIP_DIRS for part in path.parts):
