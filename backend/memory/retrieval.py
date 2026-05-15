@@ -6,16 +6,58 @@ from rank_bm25 import BM25Okapi
 
 from backend.memory.schemas import MemoryHit, MemoryItem
 
+CHINESE_STOP_CHARS = set("我你他她它的了和是要想给帮还按吗呢啊吧就都很有在不吃今天")
+
+SYNONYM_GROUPS = [
+    {"牛肉", "红肉", "beef", "red meat", "牛排"},
+    {"膝盖", "膝", "knee", "腿部"},
+    {"肩", "肩膀", "肩部", "shoulder", "推举"},
+    {"腰", "背", "lower back", "back"},
+    {"减脂", "减重", "减肥", "瘦", "cutting", "cut"},
+    {"增肌", "增重", "壮", "bulk", "muscle", "gain muscle"},
+    {"中餐", "中国菜", "chinese food", "chinese style"},
+    {"预算", "预算低", "省钱", "便宜", "low budget", "cheap"},
+    {"早餐", "快手", "simple breakfast", "quick breakfast"},
+    {"乳糖", "乳制品", "牛奶", "milk-free", "lactose"},
+    {"素食", "vegetarian", "vegan", "不吃肉"},
+    {"马拉松", "marathon", "长跑", "carb loading"},
+]
+
+
+def expand_with_synonyms(tokens: list[str], text: str) -> list[str]:
+    expanded = set(tokens)
+    lowered = text.lower()
+    for group in SYNONYM_GROUPS:
+        if any(term in lowered or term in expanded for term in group):
+            expanded.update(group)
+    return list(expanded)
+
 
 def tokenize(text: str) -> list[str]:
     lowered = text.lower()
     latin = re.findall(r"[a-z0-9]+", lowered)
-    cjk = re.findall(r"[\u4e00-\u9fff]", lowered)
+    cjk = [char for char in re.findall(r"[\u4e00-\u9fff]", lowered) if char not in CHINESE_STOP_CHARS]
     words = []
-    for phrase in ["牛肉", "膝盖", "减脂", "增肌", "早餐", "中餐", "乳糖", "素食", "马拉松"]:
+    for phrase in [
+        "牛肉",
+        "红肉",
+        "膝盖",
+        "减脂",
+        "增肌",
+        "早餐",
+        "中餐",
+        "乳糖",
+        "乳制品",
+        "素食",
+        "马拉松",
+        "预算",
+        "肩伤",
+        "肩部",
+        "长跑",
+    ]:
         if phrase in lowered:
             words.append(phrase)
-    return latin + cjk + words
+    return expand_with_synonyms(latin + cjk + words, lowered)
 
 
 def lexical_overlap(query_tokens: set[str], doc_tokens: set[str]) -> float:

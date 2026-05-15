@@ -10,6 +10,14 @@ def test_distiller_extracts_preference() -> None:
     assert "用户喜欢简单早餐" in summaries
 
 
+def test_distiller_extracts_synonym_constraints() -> None:
+    memories = distill_memories("我吃不了红肉，喝奶不舒服，只能在家徒手练")
+    summaries = {m["summary"] for m in memories}
+    assert "用户不吃牛肉" in summaries
+    assert "用户乳糖不耐" in summaries
+    assert "用户在家训练/徒手" in summaries
+
+
 def test_chinese_single_doc_overlap_hits_beef() -> None:
     store = MemoryStore(":memory:")
     store.add({"user_id": "u1", "type": "preference", "summary": "不吃牛肉", "retrievable_text": "用户不吃牛肉"})
@@ -47,3 +55,22 @@ def test_retrieval_deduplicates_existing_duplicate_summaries() -> None:
         )
     hits = search_memories("牛肉饮食", store.list_by_user("u1"), top_k=3)
     assert [hit.summary for hit in hits] == ["用户不吃牛肉"]
+
+
+def test_retrieval_expands_synonyms() -> None:
+    store = MemoryStore(":memory:")
+    store.add(
+        {"user_id": "u1", "type": "constraint", "summary": "用户不吃牛肉", "retrievable_text": "用户不吃牛肉"}
+    )
+    hits = search_memories("推荐高蛋白晚餐，要红肉替代品", store.list_by_user("u1"), top_k=3)
+    assert hits
+    assert hits[0].summary == "用户不吃牛肉"
+
+
+def test_retrieval_avoids_common_char_false_positive() -> None:
+    store = MemoryStore(":memory:")
+    store.add(
+        {"user_id": "u1", "type": "constraint", "summary": "用户不吃牛肉", "retrievable_text": "用户不吃牛肉"}
+    )
+    hits = search_memories("我今天想吃鱼", store.list_by_user("u1"), top_k=3)
+    assert hits == []
