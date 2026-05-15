@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from datetime import UTC, datetime
 from typing import Any
 
@@ -44,6 +45,10 @@ async def search_openfoodfacts(query: str, timeout: float = 5.0) -> NutritionRes
                 if not products:
                     raise NutritionParseError("no_match")
                 product = products[0]
+                product_name = product.get("product_name") or query
+                query_terms = [term for term in re.findall(r"[a-zA-Z]{3,}", query.lower()) if term not in {"and", "the"}]
+                if query_terms and not any(term in product_name.lower() for term in query_terms):
+                    raise NutritionParseError("no_match")
                 nutriments = product.get("nutriments") or {}
                 kcal = _nutriment(nutriments, "energy-kcal_100g", "energy-kcal")
                 protein = _nutriment(nutriments, "proteins_100g", "proteins")
@@ -52,7 +57,7 @@ async def search_openfoodfacts(query: str, timeout: float = 5.0) -> NutritionRes
                 if None in {kcal, protein, carbs, fat}:
                     raise NutritionParseError("parse_error")
                 return NutritionResult(
-                    name=product.get("product_name") or query,
+                    name=product_name,
                     kcal=kcal or 0.0,
                     protein_g=protein or 0.0,
                     carb_g=carbs or 0.0,

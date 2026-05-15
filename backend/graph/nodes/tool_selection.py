@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from backend.graph.state import AgentState
 
-
 FOOD_HINTS = [
     ("燕麦", "oatmeal"),
     ("oat", "oatmeal"),

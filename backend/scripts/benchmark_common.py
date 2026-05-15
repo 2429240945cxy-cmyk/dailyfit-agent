@@ -4,6 +4,8 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from backend.runtime.config import get_settings
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -25,6 +27,7 @@ def write_result(name: str, result: dict) -> Path:
 
 
 def base_result(benchmark: str, dataset: str, mode: str, sample_count: int) -> dict:
+    settings = get_settings()
     return {
         "benchmark": benchmark,
         "dataset": dataset,
@@ -34,9 +37,9 @@ def base_result(benchmark: str, dataset: str, mode: str, sample_count: int) -> d
         "cost_usd": 0.0,
         "cache_hit_rate": 0.0,
         "fallback_count": 0,
-        "provider": "aliyun_openai",
-        "model": "qwen-plus",
-        "judge_model": "qwen-max",
+        "provider": settings.llm_provider,
+        "model": settings.llm_model,
+        "judge_model": settings.judge_model,
         "created_at": datetime.now(UTC).isoformat(),
         "notes": [],
     }

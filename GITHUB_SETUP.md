@@ -73,3 +73,31 @@ git tag v1.0.0-live-real-data
 git push origin v1.0.0-live-real-data
 gh release create v1.0.0-live-real-data --title "DailyFit Agent v1.0.0 - Aliyun Live + Real Data + Web UI" --notes-file docs/release-notes-v1.md
 ```
+
+## Live Finalization Manual Flow
+
+Use this after installing and authenticating `gh`:
+
+```bash
+gh auth login
+gh auth status
+
+gh repo create dailyfit-agent --public --source=. --remote=origin --push
+# If the repo already exists and no remote is configured:
+# git remote add origin https://github.com/<YOUR_USERNAME>/dailyfit-agent.git
+# git push -u origin main
+
+gh issue create \
+  --title "Validate Aliyun live mode and real-data benchmarks" \
+  --body "Track live DashScope smoke, live benchmark execution, README metric verification, and no-secret audit."
+
+git checkout -b issue-live-finalization
+git add .
+git reset .env
+git commit -m "chore: finalize aliyun live mode and real-data benchmark reporting"
+git push -u origin issue-live-finalization
+
+gh pr create \
+  --title "Finalize Aliyun live mode and benchmark reporting" \
+  --body "Closes #<issue-number>. Validates DashScope live smoke, live benchmark outputs, README verification, web smoke, and no-secret scan."
+```
