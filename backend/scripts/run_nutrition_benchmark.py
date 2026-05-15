@@ -25,6 +25,7 @@ async def run() -> dict:
     mode = settings.public_mode
     errors = []
     fallback_count = 0
+    real_source_count = 0
     hits = 0
     adversarial_hits = 0
     adversarial_count = 0
@@ -35,6 +36,12 @@ async def run() -> dict:
         errors.append(error)
         if result.fallback_used:
             fallback_count += 1
+        computed_from = (result.raw or {}).get("computed_from_source") if result.raw else None
+        if result.source in {"openfoodfacts", "usda_fdc"} or computed_from in {
+            "openfoodfacts",
+            "usda_fdc",
+        }:
+            real_source_count += 1
         if error <= 120:
             hits += 1
             if row["category"] != "standard":
@@ -46,6 +53,7 @@ async def run() -> dict:
         "meal_kcal_mae": round(sum(errors) / max(1, len(errors)), 2),
         "food_lookup_hit_rate": round(hits / max(1, len(rows)), 4),
         "adversarial_hit_rate": round(adversarial_hits / max(1, adversarial_count), 4),
+        "real_source_rate": round(real_source_count / max(1, len(rows)), 4),
     }
     output["fallback_count"] = fallback_count
     output["notes"].append("Ground truth is independent of runtime lookup responses.")

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 from datetime import UTC, datetime
 from typing import Any
 
@@ -18,6 +19,17 @@ NUTRIENT_IDS = {
     "fat_g": {1004},
     "carb_g": {1005},
 }
+
+PREFERRED_DATA_TYPES = ["SR Legacy", "Foundation"]
+
+
+def _tokenize_query(text: str) -> set[str]:
+    tokens = set()
+    for token in re.findall(r"[a-z0-9]+", text.lower()):
+        if token in {"and", "or", "the", "with", "raw", "cooked"}:
+            continue
+        tokens.add(token.rstrip("s"))
+    return tokens
 
 
 def _extract_nutrients(food: dict[str, Any]) -> dict[str, float]:
@@ -41,14 +53,12 @@ def _extract_nutrients(food: dict[str, Any]) -> dict[str, float]:
 
 
 async def search_usda(query: str, timeout: float = 5.0) -> NutritionResult:
-    api_key = os.getenv("USDA_API_KEY")
-    if not api_key:
-        raise NutritionParseError("missing_key")
+    api_key = os.getenv("USDA_API_KEY") or "DEMO_KEY"
     params = {
         "api_key": api_key,
         "query": query,
-        "dataType": ["SR Legacy", "Foundation", "Survey (FNDDS)", "Branded"],
-        "pageSize": 1,
+        "dataType": PREFERRED_DATA_TYPES,
+        "pageSize": 10,
     }
     async with httpx.AsyncClient(timeout=timeout) as client:
         response = await client.get(USDA_SEARCH_URL, params=params)
@@ -59,7 +69,14 @@ async def search_usda(query: str, timeout: float = 5.0) -> NutritionResult:
     foods = payload.get("foods") or []
     if not foods:
         raise NutritionParseError("no_match")
-    food = foods[0]
+    query_tokens = _tokenize_query(query)
+    food = max(
+        foods,
+        key=lambda item: (
+            len(query_tokens & _tokenize_query(item.get("description", ""))),
+            1 if item.get("dataType") == "SR Legacy" else 0,
+        ),
+    )
     nutrients = _extract_nutrients(food)
     fdc_id = food.get("fdcId")
     return NutritionResult(
@@ -74,5 +91,10 @@ async def search_usda(query: str, timeout: float = 5.0) -> NutritionResult:
         source_detail=f"USDA FoodData Central {food.get('dataType', '')} fdc_id={fdc_id}",
         fetched_at=datetime.now(UTC).isoformat(),
         fallback_used=False,
-        raw={"fdc_id": fdc_id, "dataType": food.get("dataType"), "description": food.get("description")},
+        raw={
+            "fdc_id": fdc_id,
+            "dataType": food.get("dataType"),
+            "description": food.get("description"),
+            "api_key_mode": "configured" if os.getenv("USDA_API_KEY") else "public_demo_key",
+        },
     )
