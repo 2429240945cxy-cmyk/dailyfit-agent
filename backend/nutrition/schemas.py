@@ -7,6 +7,7 @@ from pydantic import BaseModel
 NutritionSource = Literal[
     "openfoodfacts",
     "usda_fdc",
+    "usda_sr_legacy_cache",
     "hpb_focos_cached_manual",
     "local_food_db",
     "computed",

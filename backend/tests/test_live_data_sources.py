@@ -35,4 +35,10 @@ async def test_live_lookup_falls_back_without_keys(monkeypatch) -> None:
     from backend.tools.nutrition_tools import lookup_nutrition
 
     result = await lookup_nutrition("燕麦")
-    assert result.source in {"openfoodfacts", "usda_fdc", "hpb_focos_cached_manual", "local_food_db"}
+    assert result.source in {
+        "openfoodfacts",
+        "usda_fdc",
+        "usda_sr_legacy_cache",
+        "hpb_focos_cached_manual",
+        "local_food_db",
+    }

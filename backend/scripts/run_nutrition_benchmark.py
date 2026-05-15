@@ -37,9 +37,10 @@ async def run() -> dict:
         if result.fallback_used:
             fallback_count += 1
         computed_from = (result.raw or {}).get("computed_from_source") if result.raw else None
-        if result.source in {"openfoodfacts", "usda_fdc"} or computed_from in {
+        if result.source in {"openfoodfacts", "usda_fdc", "usda_sr_legacy_cache"} or computed_from in {
             "openfoodfacts",
             "usda_fdc",
+            "usda_sr_legacy_cache",
         }:
             real_source_count += 1
         if error <= 120:

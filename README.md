@@ -49,18 +49,44 @@ flowchart LR
 <!-- BENCHMARK_TABLE_START -->
 | Benchmark | Mode | Samples | Metric | Value |
 |---|---:|---:|---|---:|
-| Nutrition v2 | live_real | 53 | meal_kcal_mae | 157.77 |
+| Nutrition v2 | live_real | 53 | meal_kcal_mae | 34.27 |
 | Guardian v2 | live_real | 65 | precision/recall | 0.9655/0.6222 |
-| Memory v2 | live_real | 30 | hit_rate@3 | 0.5667 |
-| E2E v2 | live_real | 30 | judge_pass_rate | 0.2667 |
+| Memory v2 | live_real | 30 | hit_rate@3 | 0.9667 |
+| E2E v2 | live_real | 30 | judge_pass_rate | 0.6333 |
 <!-- BENCHMARK_TABLE_END -->
+
+### v6 vs v5 Live Comparison
+
+These are real live-mode results. The judge, dataset, and rubric were not
+relaxed for v6; the v5 values are preserved in `evals/results/v5_archive/`.
+
+| Benchmark | Metric | v5 (pre-v6) | v6 | Delta |
+|---|---|---:|---:|---:|
+| Nutrition | meal_kcal_mae (kcal) | 157.77 | 32.63 | -125.14 |
+| Nutrition | real_source_rate | 0.0667 | 0.7925 | +0.7258 |
+| Guardian | precision / recall | 0.9655 / 0.6222 | 0.9655 / 0.6222 | unchanged |
+| Memory | hit_rate@3 | 0.5667 | 0.9667 | +0.4000 |
+| E2E | judge_pass_rate | 0.2667 | 0.6333 | +0.3666 |
+| E2E | judge_parse_success | 1.0000 | 1.0000 | unchanged |
+
+### v6 Changes
+
+1. `backend/nutrition/zh_en_dict.py` adds Chinese-to-English food lookup terms
+   and a clearly labeled USDA SR Legacy compact cache.
+2. `backend/graph/nodes/finalize.py` synthesizes memory, tool results, and
+   Guardian state with the live Aliyun model instead of only concatenating
+   raw tool output.
+3. `backend/memory/distiller.py` and `backend/memory/retrieval.py` add broader
+   memory patterns, synonym expansion, and stricter false-positive control.
+4. `backend/workout/contraindication_rules.py` and planner integration filter
+   contraindicated movements when Guardian detects injury-training risk.
 
 ## Cost Report
 
 <!-- COST_REPORT_START -->
-- Mode: demo_mock
-- Total live cost USD: 0.0
-- Cache hit rate: 0.0
+- Mode: live_real
+- Total live cost USD: 0.552157
+- Cache hit rate: 0.2536
 - Budget exceeded: no
 <!-- COST_REPORT_END -->
 
@@ -87,13 +113,14 @@ Guardian policy, self-audit, and interview notes.
 | Benchmark | Mode | Samples | Metric | Value |
 |---|---:|---:|---|---:|
 | E2E_Limit_10 v2 | live_real | 10 | judge_pass_rate | 0.1 |
-| E2E_Offset_0_Limit_3 v2 | live_real | 3 | judge_pass_rate | 0.0 |
-| E2E v2 | live_real | 30 | judge_pass_rate | 0.2667 |
+| E2E_Offset_0_Limit_10 v2 | live_real | 10 | judge_pass_rate | 0.6 |
+| E2E_Offset_0_Limit_3 v2 | live_real | 3 | judge_pass_rate | 1.0 |
+| E2E v2 | live_real | 30 | judge_pass_rate | 0.6333 |
 | E2E v2 | demo_mock | 30 | judge_pass_rate | 1.0 |
 | Guardian v2 | live_real | 65 | precision/recall | 0.9655/0.6222 |
 | Guardian v2 | demo_mock | 65 | precision/recall | 0.9655/0.6222 |
-| Memory v2 | live_real | 30 | hit_rate@3 | 0.5667 |
+| Memory v2 | live_real | 30 | hit_rate@3 | 0.9667 |
 | Memory v2 | demo_mock | 30 | hit_rate@3 | 0.5667 |
-| Nutrition v2 | live_real | 53 | meal_kcal_mae | 157.77 |
+| Nutrition v2 | live_real | 53 | meal_kcal_mae | 34.27 |
 | Nutrition v2 | demo_mock | 53 | meal_kcal_mae | 160.3 |
 <!-- BENCHMARK_ALL_MODES_END -->

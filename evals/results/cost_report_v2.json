@@ -1,0 +1,8 @@
+{
+  "date": "2026-05-15",
+  "input_tokens": 353956,
+  "output_tokens": 383215,
+  "cost_usd": 0.560211,
+  "cache_hit_rate": 0.2535410764872521,
+  "call_count": 706
+}

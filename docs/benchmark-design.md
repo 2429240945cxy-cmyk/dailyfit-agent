@@ -14,3 +14,7 @@ small deterministic heuristic instead of being counted as silent agent failures.
 The result JSON now reports judge pass rate, parse success rate, heuristic
 fallback rate, per-scenario pass rates, guardian intervention rate, memory use,
 and real nutrition source coverage.
+
+v6 reports USDA SR Legacy compact cache hits as real external-source nutrition
+lookups, but marks them with `source=usda_sr_legacy_cache` and explicit fallback
+metadata so they are not confused with live USDA API responses.

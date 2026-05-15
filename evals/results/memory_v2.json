@@ -1,0 +1,20 @@
+{
+  "benchmark": "memory",
+  "dataset": "G:\\健身agent\\evals\\datasets\\memory_v2.jsonl",
+  "mode": "live_real",
+  "sample_count": 30,
+  "metrics": {
+    "hit_rate@3": 0.9667,
+    "false_positive_control": 1.0
+  },
+  "cost_usd": 0.0,
+  "cache_hit_rate": 0.0,
+  "fallback_count": 0,
+  "provider": "aliyun_openai",
+  "model": "qwen3-vl-32b-thinking",
+  "judge_model": "qwen3.5-omni-plus-2026-03-15",
+  "created_at": "2026-05-15T11:23:31.486010+00:00",
+  "notes": [
+    "Memory queries use public/anonymized conversation patterns."
+  ]
+}

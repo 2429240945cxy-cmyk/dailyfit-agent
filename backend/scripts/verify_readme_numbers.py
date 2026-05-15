@@ -11,7 +11,7 @@ README = ROOT / "README.md"
 def latest_results() -> dict[str, dict]:
     results = {}
     for path in (ROOT / "evals/results").glob("*_v2_*.json"):
-        if path.name == "baseline.json" or "pre_judge_fix" in path.name:
+        if path.name == "baseline.json" or "pre_judge_fix" in path.name or "pre_v6" in path.name:
             continue
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
@@ -49,7 +49,11 @@ def all_result_rows() -> str:
     rows = ["| Benchmark | Mode | Samples | Metric | Value |", "|---|---:|---:|---|---:|"]
     seen = set()
     for path in sorted((ROOT / "evals/results").glob("*_v2*.json")):
-        if path.name in {"baseline.json", "cost_report_v2.json"} or "pre_judge_fix" in path.name:
+        if (
+            path.name in {"baseline.json", "cost_report_v2.json"}
+            or "pre_judge_fix" in path.name
+            or "pre_v6" in path.name
+        ):
             continue
         try:
             result = json.loads(path.read_text(encoding="utf-8"))

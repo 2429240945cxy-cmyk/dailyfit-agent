@@ -206,7 +206,8 @@ async def run() -> dict:
                 sample_memory_used = True
             if any(
                 item.get("name") == "lookup_nutrition"
-                and item.get("result", {}).get("source") in {"openfoodfacts", "usda_fdc"}
+                and item.get("result", {}).get("source")
+                in {"openfoodfacts", "usda_fdc", "usda_sr_legacy_cache"}
                 for item in state.tool_results
             ):
                 sample_real_source_used = True

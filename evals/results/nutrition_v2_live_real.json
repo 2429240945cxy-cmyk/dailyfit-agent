@@ -1,0 +1,22 @@
+{
+  "benchmark": "nutrition",
+  "dataset": "G:\\健身agent\\evals\\datasets\\nutrition_v2.jsonl",
+  "mode": "live_real",
+  "sample_count": 53,
+  "metrics": {
+    "meal_kcal_mae": 34.27,
+    "food_lookup_hit_rate": 0.9057,
+    "adversarial_hit_rate": 0.8696,
+    "real_source_rate": 0.8302
+  },
+  "cost_usd": 0.0,
+  "cache_hit_rate": 0.0,
+  "fallback_count": 48,
+  "provider": "aliyun_openai",
+  "model": "qwen3-vl-32b-thinking",
+  "judge_model": "qwen3.5-omni-plus-2026-03-15",
+  "created_at": "2026-05-15T11:23:31.461467+00:00",
+  "notes": [
+    "Ground truth is independent of runtime lookup responses."
+  ]
+}

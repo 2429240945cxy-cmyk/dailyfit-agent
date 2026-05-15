@@ -1,0 +1,14 @@
+﻿{
+  benchmark: e2e,
+  dataset: evals/datasets/e2e_v2.jsonl,
+  mode: live_real,
+  sample_count: 30,
+  metrics: {judge_pass_rate: 0.2667, judge_parse_success_rate: 1.0, heuristic_fallback_rate: 0.0, judge_error_count: 0, guardian_intervention_rate: 0.4, memory_used_rate: 0.8, real_source_rate: 0.0667},
+  cost_usd: 0.05666,
+  cache_hit_rate: 0.0,
+  fallback_count: 0,
+  provider: aliyun_openai,
+  model: qwen3-vl-32b-thinking,
+  judge_model: qwen3.5-omni-plus-2026-03-15,
+  notes: [v5 archive reconstructed from v5 README/final report metrics because live result JSON files are ignored by git.]
+}
