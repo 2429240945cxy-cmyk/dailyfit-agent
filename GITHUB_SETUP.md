@@ -4,6 +4,95 @@
 GitHub mode. This is not a project failure; use the commands below on a
 machine with `gh` installed and authenticated.
 
+## Current v6 Upload Status
+
+Checked on 2026-06-03:
+
+- Local branch: `main`
+- GitHub CLI: not available on PATH in this environment
+- Git remote: not configured
+- `.env` is ignored by git
+- Sensitive token scan: passed
+
+Use one of the two upload paths below. Do not add `.env`.
+
+## Recommended Upload Path With `gh`
+
+Install GitHub CLI on Windows:
+
+```powershell
+winget install --id GitHub.cli
+# or:
+# choco install gh
+```
+
+Authenticate and upload the current project:
+
+```powershell
+cd G:\健身agent
+gh auth login
+gh auth status
+
+rtk git status --short
+rtk python backend/scripts/scan_sensitive_tokens.py
+rtk git branch -M main
+
+gh repo create dailyfit-agent --public --source=. --remote=origin --push
+```
+
+If the repo already exists on GitHub, bind it manually and push:
+
+```powershell
+cd G:\健身agent
+rtk git remote add origin https://github.com/<YOUR_USERNAME>/dailyfit-agent.git
+rtk git push -u origin main
+```
+
+Create a tracking issue for the uploaded v6 version:
+
+```powershell
+gh issue create `
+  --title "Publish DailyFit Agent v6 live benchmark portfolio" `
+  --body "Upload the v6 portfolio project with Aliyun live mode, real-data nutrition tools, Guardian, memory retrieval, web UI, benchmark JSON, no-secret scan, and v5-to-v6 metric comparison."
+```
+
+Optional branch/PR flow after the initial push:
+
+```powershell
+rtk git checkout -b codex/github-upload-final-check
+rtk python backend/scripts/scan_sensitive_tokens.py
+rtk python backend/scripts/verify_readme_numbers.py
+rtk git push -u origin codex/github-upload-final-check
+
+gh pr create `
+  --title "Finalize DailyFit Agent v6 GitHub portfolio" `
+  --body "Validates README metrics, no-secret scan, benchmark artifacts, web smoke, and v5-to-v6 result archive."
+```
+
+## Manual Upload Path Without `gh`
+
+If you do not want to install `gh`:
+
+1. Open GitHub in the browser and create a new public repository named `dailyfit-agent`.
+2. Do not initialize it with README, license, or `.gitignore`.
+3. Run:
+
+```powershell
+cd G:\健身agent
+rtk git status --short
+rtk python backend/scripts/scan_sensitive_tokens.py
+rtk git branch -M main
+rtk git remote add origin https://github.com/<YOUR_USERNAME>/dailyfit-agent.git
+rtk git push -u origin main
+```
+
+If `origin` already exists:
+
+```powershell
+rtk git remote set-url origin https://github.com/<YOUR_USERNAME>/dailyfit-agent.git
+rtk git push -u origin main
+```
+
 ## Install And Authenticate
 
 ```bash
