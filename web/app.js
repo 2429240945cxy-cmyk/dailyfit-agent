@@ -13,6 +13,10 @@ function pretty(value) {
   return JSON.stringify(value, null, 2);
 }
 
+function formatAssistantText(text) {
+  return (text || "").trim() || "No response returned.";
+}
+
 function appendMessage(role, text, meta = "") {
   const article = document.createElement("article");
   article.className = `message ${role}`;
@@ -45,6 +49,7 @@ async function loadHealth() {
   $("modeBadge").textContent = health.public_mode || health.mode;
   $("providerBadge").textContent = `${health.provider}/${health.model}`;
   $("healthBadge").textContent = health.status;
+  $("modeText").textContent = health.public_mode || health.mode;
 }
 
 function renderList(targetId, rows, formatter) {
@@ -52,7 +57,8 @@ function renderList(targetId, rows, formatter) {
   target.innerHTML = "";
   if (!rows || rows.length === 0) {
     const li = document.createElement("li");
-    li.textContent = "None";
+    li.className = "empty";
+    li.textContent = "No items yet";
     target.appendChild(li);
     return;
   }
@@ -64,11 +70,12 @@ function renderList(targetId, rows, formatter) {
 }
 
 function renderResult(data) {
-  $("guardianBox").textContent = data.guardian?.verdict || "-";
+  $("guardianBox").textContent = `Guardian ${data.guardian?.verdict || "-"}`;
   $("traceBox").textContent = data.trace_id || "-";
-  $("tokensBox").textContent = `${data.usage?.input_tokens || 0}/${data.usage?.output_tokens || 0}`;
+  const totalTokens = (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0);
+  $("tokensBox").textContent = `${totalTokens} tokens`;
   $("costBox").textContent = `$${Number(data.usage?.cost_usd || 0).toFixed(6)}`;
-  $("cacheBox").textContent = String(Boolean(data.usage?.cache_hit));
+  $("cacheBox").textContent = `cache ${String(Boolean(data.usage?.cache_hit))}`;
   $("traceInput").value = data.trace_id || "";
 
   renderList("memoryList", data.memory_hits || [], (hit) => `${hit.summary} (${hit.score})`);
@@ -85,7 +92,8 @@ async function send(messageOverride) {
 
   $("sendBtn").disabled = true;
   appendMessage("user", message);
-  const pending = appendMessage("assistant", "Thinking...", "calling agent");
+  const pending = appendMessage("assistant", "DailyFit is thinking", "calling agent");
+  pending.classList.add("pending");
 
   try {
     const data = await getJson("/chat", {
@@ -97,13 +105,15 @@ async function send(messageOverride) {
         message,
       }),
     });
-    pending.querySelector("p").textContent = data.response || "";
+    pending.classList.remove("pending");
+    pending.querySelector("p").textContent = formatAssistantText(data.response);
     pending.querySelector("small").textContent =
-      `trace ${data.trace_id} · guardian ${data.guardian?.verdict || "-"} · ` +
-      `tokens ${(data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0)} · ` +
+      `trace ${data.trace_id} · ${data.mode} · guardian ${data.guardian?.verdict || "-"} · ` +
+      `tokens ${(data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0)} · cache ${Boolean(data.usage?.cache_hit)} · ` +
       `$${Number(data.usage?.cost_usd || 0).toFixed(6)}`;
     renderResult(data);
     $("message").value = "";
+    autosizeMessage();
     await loadLogs();
   } catch (err) {
     pending.querySelector("p").textContent = `Error: ${err.message}`;
@@ -142,12 +152,19 @@ async function loadLogs() {
 
 async function loadBenchmarks() {
   const data = await getJson("/benchmarks/latest");
-  $("benchmarkBox").textContent = pretty(data.results || []);
+  const rows = (data.results || []).slice(0, 4).map((item) => ({
+    benchmark: item.benchmark,
+    mode: item.mode,
+    samples: item.sample_count,
+    metrics: item.metrics,
+  }));
+  $("benchmarkBox").textContent = pretty(rows);
 }
 
 for (const btn of document.querySelectorAll("[data-demo]")) {
   btn.addEventListener("click", () => {
     $("message").value = btn.dataset.demo;
+    autosizeMessage();
     $("message").focus();
   });
 }
@@ -158,12 +175,19 @@ $("chatForm").addEventListener("submit", (event) => {
 });
 
 $("message").addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+  if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();
     send();
   }
 });
 
+function autosizeMessage() {
+  const box = $("message");
+  box.style.height = "auto";
+  box.style.height = `${Math.min(box.scrollHeight, 180)}px`;
+}
+
+$("message").addEventListener("input", autosizeMessage);
 $("loadAuditBtn").addEventListener("click", loadAudit);
 
 loadHealth().catch((err) => {
