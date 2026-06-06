@@ -17,6 +17,15 @@ function formatAssistantText(text) {
   return (text || "").trim() || "No response returned.";
 }
 
+function setMeta(container, meta) {
+  container.innerHTML = "";
+  for (const part of meta.split("·").map((item) => item.trim()).filter(Boolean)) {
+    const span = document.createElement("span");
+    span.textContent = part;
+    container.appendChild(span);
+  }
+}
+
 function appendMessage(role, text, meta = "") {
   const article = document.createElement("article");
   article.className = `message ${role}`;
@@ -33,7 +42,7 @@ function appendMessage(role, text, meta = "") {
 
   if (meta) {
     const small = document.createElement("small");
-    small.textContent = meta;
+    setMeta(small, meta);
     bubble.appendChild(small);
   }
 
@@ -64,6 +73,7 @@ function renderList(targetId, rows, formatter) {
   }
   for (const row of rows) {
     const li = document.createElement("li");
+    li.className = "list-card";
     li.textContent = formatter(row);
     target.appendChild(li);
   }
@@ -76,12 +86,13 @@ function renderResult(data) {
   $("tokensBox").textContent = `${totalTokens} tokens`;
   $("costBox").textContent = `$${Number(data.usage?.cost_usd || 0).toFixed(6)}`;
   $("cacheBox").textContent = `cache ${String(Boolean(data.usage?.cache_hit))}`;
+  $("sessionScore").textContent = data.mode || "Ready";
   $("traceInput").value = data.trace_id || "";
 
   renderList("memoryList", data.memory_hits || [], (hit) => `${hit.summary} (${hit.score})`);
   renderList("sourceList", data.source_attribution || [], (source) => {
     const fallback = source.fallback_used ? ` fallback=${source.fallback_reason}` : "";
-    return `${source.name}: ${source.source}${fallback}`;
+    return `${source.name} · ${source.source}${fallback}`;
   });
   $("toolBox").textContent = pretty(data.tool_results || []);
 }
@@ -107,10 +118,12 @@ async function send(messageOverride) {
     });
     pending.classList.remove("pending");
     pending.querySelector("p").textContent = formatAssistantText(data.response);
-    pending.querySelector("small").textContent =
+    setMeta(
+      pending.querySelector("small"),
       `trace ${data.trace_id} · ${data.mode} · guardian ${data.guardian?.verdict || "-"} · ` +
       `tokens ${(data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0)} · cache ${Boolean(data.usage?.cache_hit)} · ` +
-      `$${Number(data.usage?.cost_usd || 0).toFixed(6)}`;
+      `$${Number(data.usage?.cost_usd || 0).toFixed(6)}`
+    );
     renderResult(data);
     $("message").value = "";
     autosizeMessage();
@@ -189,6 +202,12 @@ function autosizeMessage() {
 
 $("message").addEventListener("input", autosizeMessage);
 $("loadAuditBtn").addEventListener("click", loadAudit);
+
+renderList("memoryList", [], (row) => row);
+renderList("sourceList", [], (row) => row);
+$("toolBox").textContent = "[]";
+$("auditBox").textContent = "{}";
+$("benchmarkBox").textContent = "Loading benchmarks...";
 
 loadHealth().catch((err) => {
   $("healthBadge").textContent = err.message;

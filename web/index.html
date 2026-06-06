@@ -8,23 +8,32 @@
   </head>
   <body>
     <div class="app-frame">
-      <aside class="rail" aria-label="DailyFit navigation">
-        <div class="brand-mark">DF</div>
-        <div class="rail-copy">
-          <strong>DailyFit</strong>
-          <span>Agent workspace</span>
+      <aside class="rail" aria-label="Workspace">
+        <div class="brand-row">
+          <div class="brand-mark">DF</div>
+          <div class="rail-copy">
+            <strong>DailyFit</strong>
+            <span>Live study desk</span>
+          </div>
         </div>
         <div class="rail-status">
           <span id="healthBadge" class="status-dot">status</span>
           <span id="modeBadge" class="rail-badge">mode</span>
           <span id="providerBadge" class="rail-badge">provider/model</span>
         </div>
+        <nav class="notebook-nav" aria-label="Notebook sections">
+          <a class="nav-item active" href="#conversation">Chat</a>
+          <a class="nav-item" href="#memoryList">Memory</a>
+          <a class="nav-item" href="#sourceList">Sources</a>
+          <a class="nav-item" href="#benchmarkBox">Benchmarks</a>
+        </nav>
+        <div class="rail-section-title">Quick notes</div>
         <div class="prompt-stack">
-          <button type="button" class="prompt-chip" data-demo="我24岁男175cm72kg想减脂，早餐想吃燕麦">减脂早餐</button>
-          <button type="button" class="prompt-chip" data-demo="记录早餐：燕麦、牛奶和香蕉">记录早餐</button>
-          <button type="button" class="prompt-chip" data-demo="我想要一个一周训练计划">一周训练</button>
-          <button type="button" class="prompt-chip" data-demo="我不吃牛肉，早餐想简单一点">长期偏好</button>
-          <button type="button" class="prompt-chip" data-demo="我膝盖疼，还能怎么训练腿部？">伤病训练</button>
+          <button type="button" class="prompt-chip nutrition" data-demo="我24岁男175cm72kg想减脂，早餐想吃燕麦">减脂早餐</button>
+          <button type="button" class="prompt-chip log" data-demo="记录早餐：燕麦、牛奶和香蕉">记录早餐</button>
+          <button type="button" class="prompt-chip workout" data-demo="我想要一个一周训练计划">一周训练</button>
+          <button type="button" class="prompt-chip memory" data-demo="我不吃牛肉，早餐想简单一点">长期偏好</button>
+          <button type="button" class="prompt-chip injury" data-demo="我膝盖疼，还能怎么训练腿部？">伤病训练</button>
           <button type="button" class="prompt-chip danger" data-demo="我想三天瘦十斤，不吃饭怎么安排？">安全拦截</button>
         </div>
       </aside>
@@ -33,7 +42,7 @@
         <section class="chat-workspace">
           <header class="chat-header">
             <div>
-              <p class="eyebrow">Fitness and nutrition agent</p>
+              <p class="eyebrow">DailyFit Notebook</p>
               <h1>DailyFit Agent</h1>
             </div>
             <div class="header-metrics">
@@ -47,7 +56,7 @@
             <article class="message assistant">
               <div class="avatar">DF</div>
               <div class="bubble">
-                <p>我是 DailyFit Agent。你可以直接问饮食、训练、偏好记录或安全边界问题，我会像聊天一样回复，并在右侧保留 trace、来源和成本信息。</p>
+                <p>今天想记录饮食、安排训练，还是调整长期目标？</p>
               </div>
             </article>
           </div>
@@ -58,17 +67,28 @@
               <label>Session <input id="sessionId" value="s1" autocomplete="off" /></label>
             </div>
             <div class="composer-box">
-              <textarea id="message" rows="1" placeholder="Ask DailyFit about meals, workouts, memory, or safety..."></textarea>
+              <textarea id="message" rows="1" placeholder="输入饮食或训练目标..."></textarea>
               <button id="sendBtn" class="send-button" type="submit" aria-label="Send">Send</button>
             </div>
-            <p class="composer-hint">Enter 发送，Shift + Enter 换行</p>
           </form>
         </section>
 
         <aside class="inspector">
+          <section class="panel score-card">
+            <div class="score-header">
+              <span>Session</span>
+              <strong id="sessionScore">Ready</strong>
+            </div>
+            <div class="score-strip">
+              <span>Source</span>
+              <span>Guardian</span>
+              <span>Cost</span>
+            </div>
+          </section>
+
           <section class="panel trace-card">
             <div class="panel-title">
-              <h2>Run Details</h2>
+              <h2>Run details</h2>
               <span id="cacheBox" class="mini-badge">cache false</span>
             </div>
             <div class="trace-grid">
@@ -85,28 +105,28 @@
 
           <section class="panel">
             <div class="panel-title">
-              <h2>Memory Hits</h2>
+              <h2>Memory hits</h2>
             </div>
             <ul id="memoryList" class="compact-list"></ul>
           </section>
 
           <section class="panel">
             <div class="panel-title">
-              <h2>Source Attribution</h2>
+              <h2>Source attribution</h2>
             </div>
             <ul id="sourceList" class="compact-list"></ul>
           </section>
 
           <section class="panel collapse-panel">
             <details>
-              <summary>Tool Results</summary>
+              <summary>Tool results</summary>
               <pre id="toolBox"></pre>
             </details>
           </section>
 
           <section class="panel">
             <div class="panel-title">
-              <h2>Audit Viewer</h2>
+              <h2>Audit viewer</h2>
             </div>
             <div class="row">
               <input id="traceInput" placeholder="trace_id" />

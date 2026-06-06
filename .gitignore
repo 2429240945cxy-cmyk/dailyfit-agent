@@ -6,6 +6,7 @@ __pycache__/
 *.egg-info/
 data/audits/*.json
 data/cache/
+data/server/
 data/llm_usage.db
 evals/results/*.json
 demo/expected_outputs/*.json
